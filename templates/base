@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PickMe 💕 - {% block title %}Сайт знакомств{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body {
+            font-family: 'Quicksand', 'Segoe UI', sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('index') }}">
+                <i class="fas fa-heart"></i> PickMe 💕
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    {% if current_user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-user-circle"></i> Профиль
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                {% if current_user.profile %}
+                                    <i class="fas fa-user-circle"></i> {{ current_user.profile.first_name }}
+                                {% else %}
+                                    <i class="fas fa-user"></i> Профиль
+                                {% endif %}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="{{ url_for('profile_view') }}"><i class="fas fa-id-card"></i> Моя анкета</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('profile_edit') }}"><i class="fas fa-edit"></i> Редактировать</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Выйти</a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('login') }}">Вход</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-primary text-white ms-2" href="{{ url_for('register') }}" style="border-radius: 50px;">
+                                <i class="fas fa-heart"></i> Регистрация
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4 pt-3">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category if category != 'message' else 'info' }} alert-dismissible fade show" role="alert" style="border-radius: 15px; border-left: 5px solid #ff6b8b;">
+                    <i class="fas fa-heart text-pink"></i> {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endwith %}
+    </div>
+
+    <main style="margin-top: 70px; min-height: calc(100vh - 200px);">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="text-white text-center py-4 mt-5" style="background: linear-gradient(135deg, #ff6b8b 0%, #ff4d6d 100%);">
+        <div class="container">
+            <p class="mb-2">&copy; 2024 PickMe 💕 - Сервис знакомств с верификацией личности</p>
+            <small>Найди свою идеальную половинку ❤️</small>
+            <div class="mt-2">
+                <i class="fas fa-heart text-white"></i>
+                <i class="fas fa-heart text-white mx-2"></i>
+                <i class="fas fa-heart text-white"></i>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

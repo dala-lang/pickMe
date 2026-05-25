@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Вход - PickMe{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 500px;">
+    <div class="card shadow-sm mt-5">
+        <div class="card-body p-5">
+            <h2 class="text-center mb-4">Вход в аккаунт</h2>
+            <form method="POST">
+                {{ form.hidden_tag() }}
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    {{ form.email(class="form-control", placeholder="your@email.com") }}
+                    {% for error in form.email.errors %}
+                        <div class="text-danger small">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Пароль</label>
+                    {{ form.password(class="form-control", placeholder="••••••") }}
+                    {% for error in form.password.errors %}
+                        <div class="text-danger small">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <button type="submit" class="btn btn-primary w-100 py-2">Войти</button>
+            </form>
+            <p class="text-center mt-3">
+                Нет аккаунта? <a href="{{ url_for('register') }}">Зарегистрироваться</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
